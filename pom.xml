@@ -52,12 +52,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.siroshun09.mcmessage</groupId>
-            <artifactId>mcmessage</artifactId>
-            <version>1.6.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.siroshun09.configapi</groupId>
             <artifactId>bungee</artifactId>
             <version>2.2.0</version>
