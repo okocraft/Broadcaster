@@ -1,16 +1,22 @@
-prefix: "&8[&6Broadcast&8]"
+prefix: "&8[&6Broadcast&8] &r"
 suffix: ""
 
 messages:
-  - "message 1"
+  - "&#123456message 1"
   - "message 2: %plugin_url%"
+  - "message 3: %run_tps%"
 
 components:
   plugin_url:
     text: "Broadcaster GitHub"
     click-event:
       type: "open_url"
-      contents: ${project.url}
+      contents: "https://github.com/okocraft/Broadcaster"
     hover-event:
       type: "show_text"
       contents: "&6Source code repository"
+  run_tps:
+    text: "&#123456Click to run &b/tps"
+    click-event:
+      type: "run_command"
+      contents: "/tps"
