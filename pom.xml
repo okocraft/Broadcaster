@@ -106,7 +106,7 @@
                             <addDefaultEntries>false</addDefaultEntries>
                         </manifest>
                         <manifestEntries>
-                            <Automatic-Module-Name>net.okocraft.okochannel</Automatic-Module-Name>
+                            <Automatic-Module-Name>net.okocraft.broadcaster</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
