@@ -13,6 +13,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.translation.Translator;
 import net.md_5.bungee.config.Configuration;
+import net.okocraft.broadcaster.BroadcasterPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -45,6 +46,14 @@ public final class MessageFileLoader {
 
     private MessageFileLoader() {
         throw new UnsupportedOperationException();
+    }
+
+    public static @NotNull MessageSet loadDefaultMessageFile(@NotNull BroadcasterPlugin plugin) {
+        var yaml = BungeeYamlFactory.loadUnsafe(plugin, "messages/default.yml");
+
+        var messageSet = loadMessageFile(yaml);
+
+        return messageSet != null ? messageSet : MessageSet.EMPTY;
     }
 
     public static @NotNull @Unmodifiable Set<MessageSet> loadMessageFiles(@NotNull Path directory) throws IOException {
