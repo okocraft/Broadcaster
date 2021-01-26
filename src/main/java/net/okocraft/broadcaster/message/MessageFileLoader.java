@@ -1,6 +1,7 @@
 package net.okocraft.broadcaster.message;
 
 import com.github.siroshun09.configapi.bungee.BungeeYaml;
+import com.github.siroshun09.configapi.bungee.BungeeYamlFactory;
 import com.github.siroshun09.configapi.common.configurable.Configurable;
 import com.github.siroshun09.configapi.common.configurable.StringList;
 import com.github.siroshun09.configapi.common.yaml.Yaml;
@@ -9,15 +10,22 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.translation.Translator;
 import net.md_5.bungee.config.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class MessageFileLoader {
 
@@ -34,6 +42,34 @@ public final class MessageFileLoader {
 
     private MessageFileLoader() {
         throw new UnsupportedOperationException();
+    }
+
+    public static @NotNull @Unmodifiable Set<MessageSet> loadMessageFiles(@NotNull Path directory) throws IOException {
+        if (Files.exists(directory)) {
+            return Files.list(directory)
+                    .filter(p -> p.toString().endsWith(".yml"))
+                    .map(BungeeYamlFactory::loadUnsafe)
+                    .map(MessageFileLoader::loadMessageFile)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toUnmodifiableSet());
+        } else {
+            Files.createDirectories(directory);
+            return Collections.emptySet();
+        }
+    }
+
+    private static @Nullable MessageSet loadMessageFile(@NotNull Yaml yaml) {
+        var fileNameWithoutExtension = yaml.getPath().getFileName().toString().replace(".yml", "");
+        var locale = Translator.parseLocale(fileNameWithoutExtension);
+
+        if (locale == null) {
+            return null;
+        }
+
+        var messages = loadMessages(yaml);
+        var components = loadPlaceholders((BungeeYaml) yaml);
+
+        return MessageSet.create(locale, messages, components);
     }
 
     public static @NotNull List<Component> loadMessages(@NotNull Yaml yaml) {
