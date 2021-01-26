@@ -1,0 +1,16 @@
+prefix: "&8[&6Broadcast&8]"
+suffix: ""
+
+messages:
+  - "message 1"
+  - "message 2: %plugin_url%"
+
+components:
+  plugin_url:
+    text: "Broadcaster GitHub"
+    click-event:
+      type: "open_url"
+      contents: ${project.url}
+    hover-event:
+      type: "show_text"
+      contents: "&6Source code repository"
