@@ -9,6 +9,7 @@
     <version>1.0.0</version>
 
     <name>Broadcaster</name>
+    <description>A bungeecord plugin that periodically sends messages to players.</description>
     <url>https://github.com/okocraft/Broadcaster</url>
 
     <licenses>
