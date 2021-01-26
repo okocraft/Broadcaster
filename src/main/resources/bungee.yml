@@ -1,0 +1,6 @@
+name: Broadcaster
+main: net.okocraft.broadcaster.BroadcasterPlugin
+version: ${project.version}
+description: ${project.description}
+url: ${project.url}
+author: Siroshun09
