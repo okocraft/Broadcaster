@@ -4,6 +4,7 @@ import com.github.siroshun09.configapi.bungee.BungeeYaml;
 import com.github.siroshun09.configapi.bungee.BungeeYamlFactory;
 import com.github.siroshun09.configapi.common.configurable.Configurable;
 import com.github.siroshun09.configapi.common.configurable.StringList;
+import com.github.siroshun09.configapi.common.configurable.StringValue;
 import com.github.siroshun09.configapi.common.yaml.Yaml;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -31,6 +32,8 @@ public final class MessageFileLoader {
 
     private static final LegacyComponentSerializer DESERIALIZER = LegacyComponentSerializer.legacyAmpersand();
 
+    private static final StringValue PREFIX_KEY = Configurable.create("prefix", "");
+    private static final StringValue SUFFIX_KEY = Configurable.create("suffix", "");
     private static final StringList MESSAGE_KEY = Configurable.createStringList("messages", Collections.emptyList());
 
     private static final String COMPONENTS_KEY = "components";
@@ -66,17 +69,24 @@ public final class MessageFileLoader {
             return null;
         }
 
-        var messages = loadMessages(yaml);
+        var prefixRaw = yaml.get(PREFIX_KEY);
+        var prefix = prefixRaw.isEmpty() ? Component.empty() : DESERIALIZER.deserialize(prefixRaw);
+
+        var suffixRaw = yaml.get(SUFFIX_KEY);
+        var suffix = suffixRaw.isEmpty() ? Component.empty() : DESERIALIZER.deserialize(suffixRaw);
+
+        var messages = loadMessages(yaml, prefix, suffix);
         var components = loadPlaceholders((BungeeYaml) yaml);
 
         return MessageSet.create(locale, messages, components);
     }
 
-    private static @NotNull List<Component> loadMessages(@NotNull Yaml yaml) {
+    private static @NotNull List<Component> loadMessages(@NotNull Yaml yaml, @NotNull Component prefix,
+                                                         @NotNull Component suffix) {
         List<Component> result = new ArrayList<>();
 
         for (var message : yaml.get(MESSAGE_KEY)) {
-            var component = DESERIALIZER.deserialize(message);
+            var component = prefix.append(DESERIALIZER.deserialize(message)).append(suffix);
             result.add(component);
         }
 
