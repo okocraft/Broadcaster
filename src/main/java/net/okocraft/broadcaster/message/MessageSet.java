@@ -6,11 +6,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 public class MessageSet {
+
+    public static final MessageSet EMPTY =
+            new MessageSet(Locale.getDefault(), Collections.emptyList()) {
+                @Override
+                public void next() {
+                }
+
+                @Override
+                public @NotNull Component getCurrentMessage() {
+                    return Component.empty();
+                }
+            };
 
     private final Locale locale;
     private final List<Component> messages;
