@@ -72,7 +72,7 @@ public final class MessageFileLoader {
         return MessageSet.create(locale, messages, components);
     }
 
-    public static @NotNull List<Component> loadMessages(@NotNull Yaml yaml) {
+    private static @NotNull List<Component> loadMessages(@NotNull Yaml yaml) {
         List<Component> result = new ArrayList<>();
 
         for (var message : yaml.get(MESSAGE_KEY)) {
@@ -83,7 +83,7 @@ public final class MessageFileLoader {
         return result;
     }
 
-    public static @NotNull Set<TextReplacementConfig> loadPlaceholders(@NotNull BungeeYaml yaml) {
+    private static @NotNull Set<TextReplacementConfig> loadPlaceholders(@NotNull BungeeYaml yaml) {
         var bungeeConfig = (Configuration) yaml.getConfig();
         var componentsSection = bungeeConfig.getSection(COMPONENTS_KEY);
 
