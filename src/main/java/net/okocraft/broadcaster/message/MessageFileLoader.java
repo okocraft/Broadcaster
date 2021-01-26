@@ -4,7 +4,6 @@ import com.github.siroshun09.configapi.bungee.BungeeYaml;
 import com.github.siroshun09.configapi.common.configurable.Configurable;
 import com.github.siroshun09.configapi.common.configurable.StringList;
 import com.github.siroshun09.configapi.common.yaml.Yaml;
-import com.github.siroshun09.mcmessage.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -37,11 +36,12 @@ public final class MessageFileLoader {
         throw new UnsupportedOperationException();
     }
 
-    public static @NotNull List<Message> loadMessages(@NotNull Yaml yaml) {
-        List<Message> result = new ArrayList<>();
+    public static @NotNull List<Component> loadMessages(@NotNull Yaml yaml) {
+        List<Component> result = new ArrayList<>();
 
         for (var message : yaml.get(MESSAGE_KEY)) {
-            result.add(Message.of(message));
+            var component = DESERIALIZER.deserialize(message);
+            result.add(component);
         }
 
         return result;
